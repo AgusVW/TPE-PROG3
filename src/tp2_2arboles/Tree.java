@@ -1,5 +1,7 @@
 package tp2_2arboles;
 
+import java.util.ArrayList;
+
 public class Tree { //arbol
 
 	private TreeNode root;//raiz
@@ -143,6 +145,22 @@ public class Tree { //arbol
 		return node.getValue();
 	}
 
+	//metodo de obtener el minimo verificando si mi raiz es null
+	public int getMinElem(){
+		if (this.root!=null)
+			return getMinElem(this.root);
+
+		return 0;
+	}
+
+	//metodo privado para buscar mi min mientras mi izquierda no sea null
+	private int getMinElem(TreeNode node){
+		if (node.getLeft()!=null)
+			return getMinElem(node.getLeft());
+
+		return node.getValue();
+	}
+
 	public int getHeight(){
 		if (this.root!=null)
 			return getHeight(this.root);
@@ -152,14 +170,71 @@ public class Tree { //arbol
 	//recorro mis ambos lados y veo cual es el maximo entre los dos siempre y lo voy sumando
 	//por defecto si tengo un nodo solo mi altura es 1
 	private int getHeight(TreeNode node){
-		int right=1 ,left=1;
+		int right=1 ,left=1;//altura de ambos lados siempre es 1 si no es null
 		if (node.getRight()!=null)
 			right+=getHeight(node.getRight());
 
 		if (node.getLeft()!=null)
 			left+=getHeight(node.getLeft());
 
-		return Math.max(right,left);
+		return Math.max(right,left);//retorna el maximo de ambos valores
+	}
+
+	//imprimo la rama mas larga viendo si no es null mi raiz
+	public void printBranchLongest(){
+		if (this.root!=null)
+			System.out.println(getLongestBranch(this.root).toString());
+		else
+			System.out.println("null");
+	}
+
+	//metodo recursivo para buscar la rama mas larga recorro de arriba hacia abajo
+	private ArrayList<Integer> getLongestBranch(TreeNode node){
+		ArrayList<Integer> left=new ArrayList<>();//creo ambos lados en listas
+		ArrayList<Integer> right=new ArrayList<>();
+
+		left.add(node.getValue());//siempre me añado cuando estoy en mi propia altura
+		if (node.getLeft()!=null) {
+			left.addAll(getLongestBranch(node.getLeft()));
+		}
+
+		right.add(node.getValue());//luego de todo el lado izquierdo paso al derecho
+		if (node.getRight()!=null) {
+			right.addAll(getLongestBranch(node.getRight()));
+		}
+
+		if (left.size()>right.size())//la lista de mayor tamaño va a ser la que se va agregando recursivamente
+			return left;
+		else
+			return right;
+	}
+
+	//imprimo hojas
+	public void printFrontera(){
+		if (this.root!=null)
+			System.out.println(getFrontera(this.root).toString());
+		else{
+			System.out.println("null");
+		}
+	}
+
+	//metodo para obtener todo los hijos externos(hojas)
+	private ArrayList<Integer> getFrontera(TreeNode node){
+		ArrayList<Integer> retorno=new ArrayList<>();
+
+		if (node.getLeft()!=null) {
+			retorno.addAll(getFrontera(node.getLeft()));
+		}else if(node.getLeft()==null){//cuando llega a que su izquierda es null se agrega
+			retorno.add(node.getValue());
+		}
+
+		if (node.getRight()!=null) {
+			retorno.addAll(getFrontera(node.getRight()));
+		}else if(node.getRight()==null && node.getLeft()!=null){//verifico que su derecha sea null pero que su izquierda no sino se me repiten valores
+			retorno.add(node.getValue());
+		}
+
+		return retorno;
 	}
 
 	
