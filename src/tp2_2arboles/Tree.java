@@ -44,7 +44,7 @@ public class Tree { //arbol
 
 	//verifico si mi arbol esta vacio o no
 	public boolean isEmpty(){
-		return this.root!=null;
+		return this.root==null;
 	}
 
 	//metodo de buscar elemento verificando si el arbol actual su raiz no es null
@@ -237,5 +237,66 @@ public class Tree { //arbol
 		return retorno;
 	}
 
+	public boolean delete(int num){
+		if (this.isEmpty())
+			return false;
+
+		return delete(this.root,num);
+	}
+
+	private boolean delete(TreeNode node,int num){
+		if (node.getValue()>num){
+			if (node.getLeft()!=null) {
+				return delete(node.getLeft(),num);
+			}
+			else if (node.getLeft()==null){
+				return false;
+			}
+		}
+		else if (node.getValue()<num){
+			if (node.getRight()!=null) {
+				return delete(node.getRight(),num);
+			}
+			else if (node.getRight()==null){
+				return false;
+			}
+		}
+		else if(node.getValue()==num){
+			if (node.getLeft()==null && node.getRight()==null) {
+				node=null;
+				return true;
+			}
+			else if(node.getLeft()!=null && node.getRight()!=null){
+				TreeNode nodoMasDerSubarbIzq=NMDSI(node.getLeft());
+				node.setValue(nodoMasDerSubarbIzq.getValue());
+				return true;
+			}
+			else if(node.getLeft()!=null){
+				node=node.getLeft();
+				return true;
+			}
+			else{
+				node=node.getRight();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private TreeNode NMDSI(TreeNode node) {//buscar nodo mas derecho de mi subarbol izquierdo
+		TreeNode retorno=null;
+		if (node.getRight()!=null){
+			return NMDSI(node.getRight());
+		}
+		if (node.getRight()==null){
+			retorno=node;
+			if (node.getLeft()!=null){
+				node=node.getLeft();
+			}else{
+				node=null;
+			}
+		}
+		return retorno;
+	}
 	
 }

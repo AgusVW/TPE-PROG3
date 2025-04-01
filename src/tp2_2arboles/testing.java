@@ -14,11 +14,13 @@ public class testing {
         arbol.add(20);
         arbol.add(18);
         arbol.add(11);
+        arbol.delete(8);
         //arbol.add(1);
 
-        //arbol.methodPrin(4);
+        arbol.methodPrin(1);
         //System.out.println(arbol.getHeight());
         //arbol.printFrontera();
         //System.out.println(arbol.getMinElem());
+        //System.out.println(arbol.isEmpty());
     }
 }

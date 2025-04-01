@@ -32,5 +32,7 @@ public class TreeNode {//node de arbol
 		return value;
 	}
 
+	public void setValue(Integer value){ this.value=value; }
+
 
 }
