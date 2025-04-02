@@ -13,14 +13,17 @@ public class testing {
         arbol.add(17);
         arbol.add(20);
         arbol.add(18);
-        arbol.add(11);
-        arbol.delete(8);
-        //arbol.add(1);
-
+        //arbol.add(21);
+        //arbol.add(13);
         arbol.methodPrin(1);
+        System.out.println("\n");
+        //System.out.println(arbol.delete(10));
+
+        //arbol.methodPrin(1);
         //System.out.println(arbol.getHeight());
         //arbol.printFrontera();
         //System.out.println(arbol.getMinElem());
         //System.out.println(arbol.isEmpty());
+        System.out.println(arbol.getSumatoria());
     }
 }

@@ -222,81 +222,94 @@ public class Tree { //arbol
 	private ArrayList<Integer> getFrontera(TreeNode node){
 		ArrayList<Integer> retorno=new ArrayList<>();
 
-		if (node.getLeft()!=null) {
+		if (node.getLeft()!=null) {//si mi izquierda es desigual a null sigo
 			retorno.addAll(getFrontera(node.getLeft()));
-		}else if(node.getLeft()==null){//cuando llega a que su izquierda es null se agrega
-			retorno.add(node.getValue());
 		}
 
-		if (node.getRight()!=null) {
-			retorno.addAll(getFrontera(node.getRight()));
-		}else if(node.getRight()==null && node.getLeft()!=null){//verifico que su derecha sea null pero que su izquierda no sino se me repiten valores
+		if(node.getLeft()==null && node.getRight()==null){//cuando su izquierda y derecha es null se agrega
 			retorno.add(node.getValue());
+			return retorno;//si veo que ambos son null ya no tiene sentido verificar mi derecha en el if de abajo
+		}
+
+		if (node.getRight()!=null) {//si mi derecha es desigual a null sigo
+			retorno.addAll(getFrontera(node.getRight()));
 		}
 
 		return retorno;
 	}
 
 	public boolean delete(int num){
-		if (this.isEmpty())
+		if (this.isEmpty() || !this.hasElem(num)) {
 			return false;
+		}
+		else if(this.root.getValue()==num &&
+		this.root.getLeft()==null && this.root.getRight()==null) {
+			this.root = null;
+			return true;
+		}
 
-		return delete(this.root,num);
+		TreeNode raiz=delete(this.root,num);
+		return raiz!=null;
 	}
 
-	private boolean delete(TreeNode node,int num){
-		if (node.getValue()>num){
-			if (node.getLeft()!=null) {
-				return delete(node.getLeft(),num);
+	private TreeNode delete(TreeNode node,int num){
+		if (node==null)// si nodo es null es porque pase de largo todo y empiezo a retornar
+			return null;
+
+		if (node.getValue()>num){//mi nodo que busco esta a la izquierda
+			node.setLeft(delete(node.getLeft(),num));//voy seteando recursivamente si se llegar a encontrar el nodo buscado
+		}
+		else if(node.getValue()<num){//sucede lo mismo que arriba pero para la derecha
+			node.setRight(delete(node.getRight(),num));
+		}
+		else{//aca ya si no es ni mayor ni menor o null, quiere decir que es ==
+			if (node.getLeft()==null && node.getRight()==null){//nodo hoja retorno null
+				return null;
 			}
-			else if (node.getLeft()==null){
-				return false;
+			else if(node.getLeft()==null){//mi izquierda es null entonces mi nodo padre se engancha con mi derecha
+				return node.getRight();
+			}
+			else if(node.getRight()==null){//lo mismo que el if de arribar pero engancho mi padre con mi izquierda
+				return node.getLeft();
+			}
+			else{//mi nodo a eliminar tiene 2 hijos
+				TreeNode nodoMasDerechoSubArbolIzquierdo=NMDSI(node.getLeft());//busco mi mas derecho de mi izquierda
+				node.setValue(nodoMasDerechoSubArbolIzquierdo.getValue());//seteo el valor de mi nodo parado para no perder mi derecha e izquierda
+				node.setLeft(delete(node.getLeft(),nodoMasDerechoSubArbolIzquierdo.getValue()));//ahora elimino mi valor repetido partiendo de mi izquierda
 			}
 		}
-		else if (node.getValue()<num){
-			if (node.getRight()!=null) {
-				return delete(node.getRight(),num);
-			}
-			else if (node.getRight()==null){
-				return false;
-			}
-		}
-		else if(node.getValue()==num){
-			if (node.getLeft()==null && node.getRight()==null) {
-				node=null;
-				return true;
-			}
-			else if(node.getLeft()!=null && node.getRight()!=null){
-				TreeNode nodoMasDerSubarbIzq=NMDSI(node.getLeft());
-				node.setValue(nodoMasDerSubarbIzq.getValue());
-				return true;
-			}
-			else if(node.getLeft()!=null){
-				node=node.getLeft();
-				return true;
-			}
-			else{
-				node=node.getRight();
-				return true;
-			}
-		}
-		return false;
+		return node;//retorno nodo para verificar en el metodo publico que no es null
 	}
 
 	private TreeNode NMDSI(TreeNode node) {//buscar nodo mas derecho de mi subarbol izquierdo
-		TreeNode retorno=null;
 		if (node.getRight()!=null){
 			return NMDSI(node.getRight());
 		}
-		if (node.getRight()==null){
-			retorno=node;
-			if (node.getLeft()!=null){
-				node=node.getLeft();
-			}else{
-				node=null;
-			}
-		}
-		return retorno;
+
+		return node;
 	}
+
+	public int getSumatoria(){
+		if (this.isEmpty())
+			return -1;
+
+		return getSumatoria(this.root);
+	}
+
+	private int getSumatoria(TreeNode node){//sumatoria de hijos internos
+		int contador=0;//arranco contador 0
+		if (node.getLeft()!=null || node.getRight()!=null){//si veo que tengo un hijo almenos me sumo al contador
+			contador+=node.getValue();
+		}
+		if (node.getLeft()!=null){//recorro primero todo mi izquierda y me lo sumo a mi
+			contador+=getSumatoria(node.getLeft());
+		}
+		if (node.getRight()!=null){//luego recorro toda mi derecha y me sumo nuevamente a mi
+			contador+=getSumatoria(node.getRight());
+		}
+
+		return contador;//retorno el contador total de hijos interno(sumatoria)
+	}
+
 	
 }
