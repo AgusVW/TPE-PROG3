@@ -13,7 +13,7 @@ public class testing {
         arbol.add(17);
         arbol.add(20);
         arbol.add(18);
-        //arbol.add(21);
+        //arbol.add(1);
         //arbol.add(13);
         arbol.methodPrin(1);
         System.out.println("\n");
@@ -24,6 +24,9 @@ public class testing {
         //arbol.printFrontera();
         //System.out.println(arbol.getMinElem());
         //System.out.println(arbol.isEmpty());
-        System.out.println(arbol.getSumatoria());
+        //System.out.println(arbol.getHeight());
+        //arbol.printElemAtLevel(3);
+        //arbol.printFronteraMayorA(4);
     }
+
 }

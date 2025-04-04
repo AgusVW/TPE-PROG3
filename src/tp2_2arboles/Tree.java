@@ -50,15 +50,15 @@ public class Tree { //arbol
 	//metodo de buscar elemento verificando si el arbol actual su raiz no es null
 	public boolean hasElem(int value){
 		if (this.root!=null)
-			return this.hasElemPunteroAsignado(this.root,value);
+			return this.hasElem(this.root,value);
 		return false;
 	}
 
 	//buscar elemento privado con la raiz ya pasa del publico para cumplir encapsulamiento
-	private boolean hasElemPunteroAsignado(TreeNode nodeSeguimiento,int num){
+	private boolean hasElem(TreeNode nodeSeguimiento, int num){
 		if (nodeSeguimiento.getValue()>num) {//el num buscado es menor por lo tanto va a la IZQUIERDA
 			if (nodeSeguimiento.getLeft()!=null) {
-				return hasElemPunteroAsignado(nodeSeguimiento.getLeft(),num);
+				return hasElem(nodeSeguimiento.getLeft(),num);
 			}
 			else{
 				return false;
@@ -67,7 +67,7 @@ public class Tree { //arbol
 
 		else if(nodeSeguimiento.getValue()<num){//el num buscado es menor por lo tanto va a la DERECHA
 			if (nodeSeguimiento.getRight()!=null) {
-				return hasElemPunteroAsignado(nodeSeguimiento.getRight(),num);
+				return hasElem(nodeSeguimiento.getRight(),num);
 			}
 			else{
 				return false;
@@ -76,6 +76,52 @@ public class Tree { //arbol
 		//si no es ni mayor ni menor quiere decir que el elemento esta
 		else
 			return true;//quiere decir que es verdadero
+	}
+
+	public boolean delete(int num){
+		if (this.isEmpty() || !this.hasElem(num)) {
+			return false;
+		}
+
+		TreeNode raiz=delete(this.root,num);
+		return raiz!=null;
+	}
+
+	private TreeNode delete(TreeNode node,int num){
+		if (node==null)// si nodo es null es porque pase de largo todo y empiezo a retornar
+			return null;
+
+		if (node.getValue()>num){//mi nodo que busco esta a la izquierda
+			node.setLeft(delete(node.getLeft(),num));//voy seteando recursivamente si se llegar a encontrar el nodo buscado
+		}
+		else if(node.getValue()<num){//sucede lo mismo que arriba pero para la derecha
+			node.setRight(delete(node.getRight(),num));
+		}
+		else{//aca ya si no es ni mayor ni menor o null, quiere decir que es ==
+			if (node.getLeft()==null && node.getRight()==null){//nodo hoja retorno null
+				return null;
+			}
+			else if(node.getLeft()==null){//mi izquierda es null entonces mi nodo padre se engancha con mi derecha
+				return node.getRight();
+			}
+			else if(node.getRight()==null){//lo mismo que el if de arribar pero engancho mi padre con mi izquierda
+				return node.getLeft();
+			}
+			else{//mi nodo a eliminar tiene 2 hijos
+				TreeNode nodoMasDerechoSubArbolIzquierdo=NMDSI(node.getLeft());//busco mi mas derecho de mi izquierda
+				node.setValue(nodoMasDerechoSubArbolIzquierdo.getValue());//seteo el valor de mi nodo parado para no perder mi derecha e izquierda
+				node.setLeft(delete(node.getLeft(),nodoMasDerechoSubArbolIzquierdo.getValue()));//ahora elimino mi valor repetido partiendo de mi izquierda
+			}
+		}
+		return node;//retorno nodo para verificar en el metodo publico que no es null
+	}
+
+	private TreeNode NMDSI(TreeNode node) {//buscar nodo mas derecho de mi subarbol izquierdo
+		if (node.getRight()!=null){
+			return NMDSI(node.getRight());
+		}
+
+		return node;
 	}
 
 	//metodo general para poder imprimir de 3 maneras
@@ -163,14 +209,14 @@ public class Tree { //arbol
 
 	public int getHeight(){
 		if (this.root!=null)
-			return getHeight(this.root);
+			return getHeight(this.root)-1;
 		return -1;
 	}
 
 	//recorro mis ambos lados y veo cual es el maximo entre los dos siempre y lo voy sumando
 	//por defecto si tengo un nodo solo mi altura es 1
 	private int getHeight(TreeNode node){
-		int right=1 ,left=1;//altura de ambos lados siempre es 1 si no es null
+		int right=1 ,left=1;//altura de ambos lados siempre es 0 si no es null
 		if (node.getRight()!=null)
 			right+=getHeight(node.getRight());
 
@@ -238,57 +284,41 @@ public class Tree { //arbol
 		return retorno;
 	}
 
-	public boolean delete(int num){
-		if (this.isEmpty() || !this.hasElem(num)) {
-			return false;
-		}
-		else if(this.root.getValue()==num &&
-		this.root.getLeft()==null && this.root.getRight()==null) {
-			this.root = null;
-			return true;
+	//imprimo los numeros de cierto nivel de profundidad
+	//si el nivel es menor o mayor a la altura retorna o si el arbol esta vacio
+	public void printElemAtLevel(int nivel){
+		if (this.isEmpty() || nivel>this.getHeight() || nivel<0) {
+			System.out.println("El arbol esta vacio o el nivel solicitado es menor o pasa la altura del arbol");
+			return;
 		}
 
-		TreeNode raiz=delete(this.root,num);
-		return raiz!=null;
+		System.out.println(getElemAtLevel(this.root,nivel,0).toString());
 	}
 
-	private TreeNode delete(TreeNode node,int num){
-		if (node==null)// si nodo es null es porque pase de largo todo y empiezo a retornar
-			return null;
-
-		if (node.getValue()>num){//mi nodo que busco esta a la izquierda
-			node.setLeft(delete(node.getLeft(),num));//voy seteando recursivamente si se llegar a encontrar el nodo buscado
-		}
-		else if(node.getValue()<num){//sucede lo mismo que arriba pero para la derecha
-			node.setRight(delete(node.getRight(),num));
-		}
-		else{//aca ya si no es ni mayor ni menor o null, quiere decir que es ==
-			if (node.getLeft()==null && node.getRight()==null){//nodo hoja retorno null
-				return null;
-			}
-			else if(node.getLeft()==null){//mi izquierda es null entonces mi nodo padre se engancha con mi derecha
-				return node.getRight();
-			}
-			else if(node.getRight()==null){//lo mismo que el if de arribar pero engancho mi padre con mi izquierda
-				return node.getLeft();
-			}
-			else{//mi nodo a eliminar tiene 2 hijos
-				TreeNode nodoMasDerechoSubArbolIzquierdo=NMDSI(node.getLeft());//busco mi mas derecho de mi izquierda
-				node.setValue(nodoMasDerechoSubArbolIzquierdo.getValue());//seteo el valor de mi nodo parado para no perder mi derecha e izquierda
-				node.setLeft(delete(node.getLeft(),nodoMasDerechoSubArbolIzquierdo.getValue()));//ahora elimino mi valor repetido partiendo de mi izquierda
-			}
-		}
-		return node;//retorno nodo para verificar en el metodo publico que no es null
-	}
-
-	private TreeNode NMDSI(TreeNode node) {//buscar nodo mas derecho de mi subarbol izquierdo
-		if (node.getRight()!=null){
-			return NMDSI(node.getRight());
+	private ArrayList<Integer> getElemAtLevel(TreeNode node,int nivel,int nivelActual){
+		ArrayList<Integer> retorno=new ArrayList<>();
+		if (nivel==0){//si el nivel es 0 significa que solamente se va a imprimir la raiz y retorna
+			retorno.add(node.getValue());
+			return retorno;
 		}
 
-		return node;
-	}
+		if (nivel!=nivelActual){//si el nivel actual es != a nivel buscado quiere decir que tengo que seguir bajando
+			if (node.getLeft()!=null)
+				retorno.addAll(getElemAtLevel(node.getLeft(),nivel,nivelActual+1));
 
+			if (node.getRight()!=null)
+				retorno.addAll(getElemAtLevel(node.getRight(),nivel,nivelActual+1));
+		}
+		else{//en este else se va a significar que el nivel ya no es != entonces es el nivel buscado
+			retorno.add(node.getValue());
+		}
+
+		return retorno;
+	}//TERMINA EJERCICIO 1
+
+
+
+	//EJERCICIO 2
 	public int getSumatoria(){
 		if (this.isEmpty())
 			return -1;
@@ -310,6 +340,35 @@ public class Tree { //arbol
 
 		return contador;//retorno el contador total de hijos interno(sumatoria)
 	}
+
+
+
+	//EJERCICIO 3 imprimir hojas mayor a un valor
+	public void printFronteraMayorA(int num){
+		if (this.isEmpty())
+			System.out.println("el arbol esta vacio");
+		else
+			System.out.println(getFronteraMayorA(this.root,num).toString());
+	}
+
+	private ArrayList<Integer> getFronteraMayorA(TreeNode node,int num){
+		ArrayList<Integer> retorno=new ArrayList<>();
+
+		if(node.getLeft()!=null){
+			retorno.addAll(getFronteraMayorA(node.getLeft(),num));
+		}
+		if(node.getRight()==null && node.getLeft()==null && node.getValue()>num){//mismo que el print hojas pero
+			retorno.add(node.getValue());										// agrego la otra condicion si hoja es > a numero
+			return retorno;
+		}
+		if(node.getRight()!=null){
+			retorno.addAll(getFronteraMayorA(node.getRight(),num));
+		}
+
+		return retorno;
+	}
+
+
 
 	
 }
