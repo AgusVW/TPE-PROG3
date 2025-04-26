@@ -19,7 +19,7 @@ public class TreeReplaceValuesNull {
 
 
     public void replaceInternalChildren(TreeNode root){
-        if (root==null)//retornaria si llega al final
+        if (root==null)//retornaria si llega a alguna derecha o izquierda null
             return;
 
         if (root.getLeft()==null && root.getRight()==null)//si no tiene ni siquiera un hijo retorna
