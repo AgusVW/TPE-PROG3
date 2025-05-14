@@ -1,4 +1,5 @@
-package TPE;
+package srcTPE;
+import TPE.Maquina;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,7 +12,7 @@ public class LectorTexto {
     public static void main(String [] args){       
         try {
             ArrayList<Maquina> maquinas=new ArrayList<>();
-            List<String> lines = Files.readAllLines(Paths.get("TPE/text.txt"));
+            List<String> lines = Files.readAllLines(Paths.get("TPE-PROG3/srcTPE/text.txt"));
             int piezasAproducir=Integer.parseInt(lines.get(0));
             for(int i=1;i < lines.size();i++){
                 String[] cadenas=lines.get(i).split(",");
@@ -25,6 +26,6 @@ public class LectorTexto {
             e.printStackTrace();
         }
 
-        //System.out.println(System.getProperty("user.dir")); sirve para encontrar el directorio donde esta parado
+        //System.out.println(System.getProperty("user.dir")); //sirve para encontrar el directorio donde esta parado
     }
 }
