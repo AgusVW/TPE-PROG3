@@ -1,4 +1,4 @@
-package TPE;
+package srcTPE;
 
 public class Maquina {
     private String nombre;

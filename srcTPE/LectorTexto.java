@@ -1,5 +1,4 @@
 package srcTPE;
-import TPE.Maquina;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,7 +20,10 @@ public class LectorTexto {
                 //System.out.println(lines.get(i));
             }
             System.out.println(piezasAproducir);
-            System.out.println(maquinas);
+            Fabrica fabrica=new Fabrica(maquinas);
+            //System.out.println(maquinas);
+            System.out.println(fabrica.asignacionBacktracking(piezasAproducir));
+            System.out.println(fabrica.getCostoSolucion());
         } catch (IOException e) {
             e.printStackTrace();
         }
