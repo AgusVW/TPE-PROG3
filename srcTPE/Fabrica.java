@@ -1,6 +1,6 @@
-package srcTPE;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Fabrica {
     private ArrayList<Maquina> maquinas;
@@ -56,6 +56,54 @@ public class Fabrica {
 
     public int getCostoProcesoTotal() {
         return costoProcesoTotal;
+    }
+     //BACKTRACKING
+
+
+    //GREEDY
+    public ArrayList<Maquina> greedy(int objetivo){
+        //declaro mi arreglo solucion
+        ArrayList<Maquina> solucion=new ArrayList<>();
+
+        //copiamos arreglo
+        ArrayList<Maquina> maquinasOrd=new ArrayList<>(this.maquinas);
+        maquinasOrd.sort(Collections.reverseOrder());//ordeno el arreglo de las copias de las maquinas descencdentemente
+
+        while(!maquinasOrd.isEmpty() && !solucion(solucion,objetivo)){
+            Maquina candidato=seleccionar(maquinasOrd, objetivo);
+            maquinasOrd.remove(candidato);
+            while(esFactible(solucion, candidato, objetivo)){
+                solucion.add(candidato);
+            }
+        }
+        if(solucion(solucion,objetivo))
+            return solucion;
+        else
+            return null;
+    }
+
+    public boolean solucion(ArrayList<Maquina> solucion,int objetivo){
+        int contador=0;
+        for(Maquina maquina:solucion)
+            contador+=maquina.getCantPiezas();
+        
+        return contador==objetivo;
+    }
+
+    public Maquina seleccionar(ArrayList<Maquina> maquinas,int objetivo){
+        for(Maquina maquina:maquinas){
+            if(maquina.getCantPiezas()<=objetivo)
+                return maquina;
+        }
+        return null;
+    }
+
+    public boolean esFactible(ArrayList<Maquina> solucion,Maquina candidato,int objetivo){
+        int suma=0;
+        for(Maquina maquina:solucion){
+            suma+=maquina.getCantPiezas();
+        }
+        return (suma + candidato.getCantPiezas()) <= objetivo;
     }
 
 }

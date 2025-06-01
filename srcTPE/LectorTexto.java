@@ -1,11 +1,9 @@
-package srcTPE;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import tp1.mainn;
 
 public class LectorTexto {
     public static void main(String [] args){       
@@ -22,8 +20,9 @@ public class LectorTexto {
             System.out.println(piezasAproducir);
             Fabrica fabrica=new Fabrica(maquinas);
             //System.out.println(maquinas);
-            System.out.println(fabrica.asignacionBacktracking(piezasAproducir));
-            System.out.println(fabrica.getCostoSolucion());
+            //System.out.println(fabrica.asignacionBacktracking(piezasAproducir));
+            //System.out.println(fabrica.getCostoSolucion());
+            System.out.println(fabrica.greedy(piezasAproducir));
         } catch (IOException e) {
             e.printStackTrace();
         }

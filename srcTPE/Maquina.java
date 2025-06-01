@@ -1,6 +1,6 @@
-package srcTPE;
+import java.util.Objects;
 
-public class Maquina {
+public class Maquina implements Comparable<Maquina>{
     private String nombre;
     private int cantPiezas;
 
@@ -30,7 +30,10 @@ public class Maquina {
         return "Maquina [nombre=" + nombre + ", cantPiezas=" + cantPiezas + "]";
     }
 
-    
+    @Override
+    public int compareTo(Maquina m) {
+        return Integer.compare(this.getCantPiezas(), m.getCantPiezas());
+    }
 
     
 }
