@@ -3,9 +3,9 @@
 import java.util.ArrayList;
 
 public class Solucion {
-    private ArrayList<Maquina> maquinas;
-    private int costoProcesoTotal;
-    private int costoSolucion;
+    private ArrayList<Maquina> maquinas;//camino maquinas
+    private int costoProcesoTotal;//costo total
+    private int costoSolucion;//costo solucion backtracking
     private int piezasProducidas;
     private int piezasRestantes;
 
@@ -87,7 +87,6 @@ public class Solucion {
                 "\nSolucion Obtenida: " + this.maquinas +
                 "\nCantidad de piezas: " + this.piezasProducidas +
                 "\nCosto ProcesoTotal(candidatos): " + this.costoProcesoTotal +
-                //"\nCosto Solucion: " + this.costoSolucion +
                 "\nCantidad de maquinas en Marcha: " + this.size();
     }
 }

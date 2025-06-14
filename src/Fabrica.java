@@ -15,7 +15,7 @@ public class Fabrica {
         if(!this.maquinas.isEmpty() && piezas>0){
             solucion=new Solucion(piezas);
             ArrayList<Maquina> solucionTemporal=new ArrayList<>();
-            backtracking(piezas,solucionTemporal);
+            backtracking(piezas,solucionTemporal,0);
             return this.solucion.solucionBacktracking();
         }
         return null;
@@ -24,7 +24,8 @@ public class Fabrica {
     //proceso completo con todo el arbol completo 490 sin poda
     //proceso completo con todo el arbol completo 140 con poda con cantMaquinasActuales>cantMaquinasSolucion
     //proceso completo con todo el arbol completo 63 con poda con cantMaquinasActuales>=cantMaquinasSolucion
-    private void backtracking(int piezasRestante,ArrayList<Maquina> solucionTemporal){
+    //proceso completo con todo el arbol completo 28 con poda y verificacion,implementando un indice
+    private void backtracking(int piezasRestante,ArrayList<Maquina> solucionTemporal,int indice){
         solucion.setCostoProcesoTotal(solucion.getCostoProcesoTotal()+1);
         if(piezasRestante==0){
             if(solucionTemporal.size() < solucion.size() || solucion.isEmpty()){
@@ -34,11 +35,12 @@ public class Fabrica {
             }
         }
         else{
-            for(Maquina maquina:maquinas){
-                if((maquina.getCantPiezas()<=piezasRestante ) && (!poda(solucion,solucionTemporal))){
-                    int pTemp=maquina.getCantPiezas();
-                    solucionTemporal.add(maquina);
-                    backtracking(piezasRestante-pTemp,solucionTemporal);
+            for(int i=indice;i < maquinas.size();i++){
+                Maquina maquinaTmp=maquinas.get(i);
+                if(maquinaTmp.getCantPiezas()<=piezasRestante && !poda(solucion, solucionTemporal)){
+                    int piezaTmp=maquinaTmp.getCantPiezas();
+                    solucionTemporal.add(maquinaTmp);
+                    backtracking(piezasRestante-piezaTmp, solucionTemporal, i);
                     solucionTemporal.removeLast();
                 }
             }
@@ -46,16 +48,16 @@ public class Fabrica {
     }
 
     private boolean poda(Solucion solucion,ArrayList<Maquina> maquinasActuales){
-        if(solucion.isEmpty())//si esta vacio mi arreglo solucion retorno false directo
+        if(solucion.isEmpty())//si esta vacio mi arreglo solucion retorno false directo,sino nunca arranca
             return false;
 
         return maquinasActuales.size()>=solucion.size();
     }
-     //BACKTRACKING
+
 
 
     //GREEDY
-    //costo solucion 3,ya que considero valido solo 3 candidator
+    //costo solucion 3,ya que considero valido solo 3 candidatos
     public String greedy(int objetivo){
         //declaro mi arreglo solucion
         solucion=new Solucion(objetivo);
@@ -65,7 +67,7 @@ public class Fabrica {
         maquinasOrd.sort(Collections.reverseOrder());//ordeno el arreglo de las copias de las maquinas descencdentemente
 
         while(!maquinasOrd.isEmpty() && !solucion(solucion,objetivo)){
-            Maquina candidato=seleccionar(maquinasOrd, objetivo);
+            Maquina candidato=seleccionar(maquinasOrd);
             maquinasOrd.remove(candidato);
             int factible=esFactible(solucion, candidato, objetivo);
             if(factible>0){//factible me da mas de 0 quiere decir que el candidato lo puedo meter alemnos una vez a mi solucion
@@ -82,24 +84,16 @@ public class Fabrica {
             return null;
     }
 
-    public boolean solucion(Solucion solucion,int objetivo){
-        int contador=0;
-        for(Maquina maquina:solucion.getMaquinas())
-            contador+=maquina.getCantPiezas();
-        
-        return contador==objetivo;//si llego a la solucion retorno true
+    private boolean solucion(Solucion solucion,int objetivo){
+        return solucion.getPiezasRestantes()==0;//si mis piezas restantes son 0,llegue a mi solucion
     }
 
-    public Maquina seleccionar(ArrayList<Maquina> maquinas,int objetivo){
-        for(Maquina maquina:maquinas){
-            if(maquina.getCantPiezas()<=objetivo)//saco el primero que sea menor al objetivo de piezas a construir
-                return maquina;
-        }
-        return null;
+    private Maquina seleccionar(ArrayList<Maquina> maquinas){
+        return maquinas.get(0);
     }
 
     //es factible para ahorrarme de hacer el while me fijo cuantas veces entra la maquina dependiendo de las piezas restantes que tenga
-    public int esFactible(Solucion solucion,Maquina candidato,int objetivo){
+    private int esFactible(Solucion solucion,Maquina candidato,int objetivo){
         if(candidato.getCantPiezas()<=solucion.getPiezasRestantes()){//si mi candidato no se pasa de mi piezas restantes a producir
             int vecesArepetir=solucion.getPiezasRestantes()/candidato.getCantPiezas();//calculo cuantas veces entrar con mis piezas restantes
             return vecesArepetir;
@@ -107,6 +101,7 @@ public class Fabrica {
         return 0;
     }
 
+    //este es factible lo usaba con el for por cada candidato iterando cuantas veces entre el candidato,mayor complejidad
     /*public boolean esFactible(ArrayList<Maquina> solucion,Maquina candidato,int objetivo){
         int suma=0;
         for(Maquina maquina:solucion){
