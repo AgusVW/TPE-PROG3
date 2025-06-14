@@ -1,4 +1,4 @@
-package srcTPE;
+//package srcTPE;
 import java.util.Objects;
 
 public class Maquina implements Comparable<Maquina>{
