@@ -24,7 +24,7 @@ public class LectorTexto {
             Fabrica fabrica=new Fabrica(maquinas);
 
             System.out.println(fabrica.asignacionBacktracking(piezasAproducir));
-            System.out.println();
+            System.out.println("----------------------------------------");
             System.out.println(fabrica.greedy(piezasAproducir));
             
         } catch (IOException e) {

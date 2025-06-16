@@ -11,6 +11,27 @@ public class Fabrica {
         this.solucion=new Solucion(0);
     }
 
+    /*
+     * Estrategia Backtracking:
+     * - Se genera un arbol de exploracion donde en cada nivel se decide si incluir o no
+     *   una maquina para cubrir el total de las piezas restantes.
+     * - Estado inicial: piezas a producir completas sin maquinas seleccionadas.
+     * - Estafo final/corte: cuando piezasRestante = 0. Se considera solucion si cumple y usa
+     *   menos maquinas que la mejor solucion encontrada.
+     * - Podas aplicadas:
+     *   . Si la solucion temp tiene igual o mas maquinas que la mejor solucion actual, se
+     *     descarta esa rama.
+     *     . Si ya no hya suficientes piezas para seguir, se detiene la rama.
+     * - Se busca minimizar la cantidad de maquinas usadas.
+     * - Aplica poda para descartar ramas donde la solucion en la que estoy (actual) es peor
+     * o igual a la mejor encontrada.
+     * - Para evitar soluciones/combinciones repetidas y mantener un orden en la
+     * busqueda, usamos un indice. Por ejemplo i=0 -> M1, i=1 -> M2 y asi sucesivamente hasta
+     * maquinas.size() -> cantidad de maquinas.
+     * - Se actuaiza un contador de nodos procesador para comparar a eficiencia entre versiones
+     *   resultas con o sin poda.
+     * - El metodo solucionBacktracking devuelve un String que reperesenta la mejor combinacion encontrada.
+     */
     public String asignacionBacktracking(int piezas){
         if(!this.maquinas.isEmpty() && piezas>0){
             solucion=new Solucion(piezas);
@@ -20,6 +41,9 @@ public class Fabrica {
         return this.solucion.solucionBacktracking();
     }
 
+    /*
+     * Metodo recursivo que explora todas las combinacione sposibles usando backtracking y poda.
+     */
     //proceso completo con todo el arbol completo 490 sin poda
     //proceso completo con todo el arbol completo 140 con poda con cantMaquinasActuales>cantMaquinasSolucion
     //proceso completo con todo el arbol completo 63 con poda con cantMaquinasActuales>=cantMaquinasSolucion
@@ -56,6 +80,16 @@ public class Fabrica {
 
 
     //GREEDY
+    /*
+     * Estrategia Greedy:
+     * - Los candidatos son las maquinas disponibles, ordenadas de MAYOR a MENOR en base a la cant de piezas que producen.
+     * - Estrategia de seleccion: Selecciona de manera iterativa la maquina que produce mas cantidad de piezas para
+     *   crubir la cantidad de piezas restantes, añadiendo la mayor cantidad de cada maquina sin superar el objetivo.(12 en este caso)
+     * - Se considera solucion valida cuando la suma de las piezas es exactamente el objetivo. (12 en este caso)
+     * - Esta estrategia no garantiza una solucion optima, pero permite encontarr una solucion de manera
+     *   rapida y eficiente si existe.
+     * - El metodo devuelve un String con la combinacion encontrada o solucion vacia si no se alcanzo el objetivo exacto.
+     */
     //costo solucion 3,ya que considero valido solo 3 candidatos
     public String greedy(int objetivo){
         //declaro mi arreglo solucion
