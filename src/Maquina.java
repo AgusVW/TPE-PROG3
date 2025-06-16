@@ -1,5 +1,5 @@
 //package srcTPE;
-import java.util.Objects;
+
 
 public class Maquina implements Comparable<Maquina>{
     private String nombre;
@@ -28,7 +28,7 @@ public class Maquina implements Comparable<Maquina>{
 
     @Override
     public String toString() {
-        return "Maquina [nombre=" + nombre + ", cantPiezas=" + cantPiezas + "]";
+        return  "(" + nombre + "," + cantPiezas + ")";
     }
 
     @Override

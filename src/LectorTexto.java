@@ -11,20 +11,25 @@ public class LectorTexto {
     public static void main(String [] args){       
         try {
             ArrayList<Maquina> maquinas=new ArrayList<>();
-            List<String> lines = Files.readAllLines(Paths.get("TPE-PROG3/src/text.txt"));
+            List<String> lines = Files.readAllLines(Paths.get("src/text.txt"));
             int piezasAproducir=Integer.parseInt(lines.get(0));
 
             for(int i=1;i < lines.size();i++){
                 String[] cadenas=lines.get(i).split(",");
+                String nombre=cadenas[0];//nombre maquina
                 int numPiezas=Integer.parseInt(cadenas[1]);//piezas que imprime maquina
-                String nombre=cadenas[1];//nombre maquina
                 maquinas.add(new Maquina(nombre,numPiezas));
             }
 
+            System.out.println("Maquinas disponibles: ");
+            for (Maquina m : maquinas){
+                System.out.println(m);
+            }
+            System.out.println("------------------------------");
             Fabrica fabrica=new Fabrica(maquinas);
 
             System.out.println(fabrica.asignacionBacktracking(piezasAproducir));
-            System.out.println();
+            System.out.println("------------------------------");
             System.out.println(fabrica.greedy(piezasAproducir));
             
         } catch (IOException e) {
