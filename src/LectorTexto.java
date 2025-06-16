@@ -1,4 +1,4 @@
-//package srcTPE;
+package src;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +17,7 @@ public class LectorTexto {
             for(int i=1;i < lines.size();i++){
                 String[] cadenas=lines.get(i).split(",");
                 int numPiezas=Integer.parseInt(cadenas[1]);//piezas que imprime maquina
-                String nombre=cadenas[1];//nombre maquina
+                String nombre=cadenas[0];//nombre maquina
                 maquinas.add(new Maquina(nombre,numPiezas));
             }
 

@@ -1,5 +1,5 @@
-//package srcTPE;
-import java.util.Objects;
+package src;
+
 
 public class Maquina implements Comparable<Maquina>{
     private String nombre;

@@ -1,4 +1,4 @@
-//package srcTPE;
+package src;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,9 +16,8 @@ public class Fabrica {
             solucion=new Solucion(piezas);
             ArrayList<Maquina> solucionTemporal=new ArrayList<>();
             backtracking(piezas,solucionTemporal,0);
-            return this.solucion.solucionBacktracking();
         }
-        return null;
+        return this.solucion.solucionBacktracking();
     }
 
     //proceso completo con todo el arbol completo 490 sin poda
@@ -78,10 +77,7 @@ public class Fabrica {
                 solucion.restarPiezasRestantes(candidato.getCantPiezas()*factible);
             }
         }
-        if(solucion(solucion,objetivo))
-            return solucion.solucionGreedy();
-        else
-            return null;
+        return solucion.solucionGreedy();
     }
 
     private boolean solucion(Solucion solucion,int objetivo){
@@ -100,14 +96,5 @@ public class Fabrica {
         }
         return 0;
     }
-
-    //este es factible lo usaba con el for por cada candidato iterando cuantas veces entre el candidato,mayor complejidad
-    /*public boolean esFactible(ArrayList<Maquina> solucion,Maquina candidato,int objetivo){
-        int suma=0;
-        for(Maquina maquina:solucion){
-            suma+=maquina.getCantPiezas();
-        }
-        return (suma + candidato.getCantPiezas()) <= objetivo;
-    }*/
 
 }
